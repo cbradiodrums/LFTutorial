@@ -16,16 +16,16 @@
         <td> 5 Mins (Short) </td>
         <td> 2024-06-22 </td>
         <td> LFFormEvents </td>
-        <td>  </td>
+        <td> #2 </td>
     </tr><tr>
         <td> 2 </td>
-        <td> TBD </td>
+        <td> Laserfiche Cloud - Modern Forms - Make a Form "Read Only" dynamically using the LFForm Object! </td>
         <td> Make a Form readOnly() dynamically </td>
         <td> xxxx-xx-xx </td>
-        <td> 5 Mins (Short) </td>
-        <td> TBD </td>
-        <td> TBD </td>
-        <td> </td>
+        <td> 9 Mins (Medium) </td>
+        <td> 2024-06-22 </td>
+        <td> ReadOnlyForm </td>
+        <td> #1 </td>
     </tr><tr>
         <td> 3 </td>
         <td> TBD </td>

@@ -15,7 +15,7 @@ function readOnlyForm () {
     let findFields = LFForm.findFields(
         f => ( f.settings.readOnly !== true && !excludeFieldIds.includes(f.settings.fieldId) && !['Page', 'Form'].includes(f.settings.componentType) )
     )
-    console.log(findFields)
+    // console.log(findFields) // Uncomment to see console log!
 
     let editPage = LFForm.getFieldValues(_EditButton)['value']
     switch (editPage) {

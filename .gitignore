@@ -1,0 +1,16 @@
+# Ignore all video and audio file types
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.mkv
+*.mp3
+*.wav
+*.ogg
+*.flac
+*.aac
+*.wma
+*.m4a
+*.opus
+*.peak

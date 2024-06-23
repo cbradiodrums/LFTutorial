@@ -28,11 +28,11 @@
         <td> #1 </td>
     </tr><tr>
         <td> 3 </td>
-        <td> TBD </td>
+        <td> Laserfiche Cloud - Modern Forms - Alter a Specific Field in a Collection usinf the LFForm Object! </td>
         <td> Edit a Specific Collection Row </td>
         <td> xxxx-xx-xx </td>
-        <td> 5 Mins (Short) </td>
-        <td> TBD </td>
+        <td> 25 Mins (LONG) </td>
+        <td> 2024-06-22 </td>
         <td> TBD </td>
         <td> </td>
     </tr><tr>

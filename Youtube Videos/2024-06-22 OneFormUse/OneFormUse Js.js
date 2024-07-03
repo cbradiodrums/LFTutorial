@@ -14,7 +14,7 @@ const _clearanceDD = {fieldId: 2}
 const _denialReasonML = {fieldId: 3}
 // Edit Button
 const _EditButton = {fieldId: 5}
-const a_currentStepNameHTML = {fieldId: 6}
+const _currentStepNameHTML = {fieldId: 6}
 
 // === Form Load Functions
 onFormLoad()
@@ -25,33 +25,20 @@ async function forSubscriptions (currentStepName) { if (testLogging) console.log
     switch (currentStepName) {
         case "REVIEW":
             await LFForm.onFieldChange(readOnlyForm, _EditButton)
+        case "ASSIGN":
+            const subscription = [_clearanceDD, _denialReasonML].forEach(field => LFForm.onFieldChange(
+                event =>  forDenialReasons(event) , {fieldId: field['fieldId']}))
             break;
         default:
-            await LFForm.hideFields(_EditButton, _clearanceDD, _denialReasonML)
-            break;
+            return;
     }
-    forDenialReasons()
-    const subscription = [_clearanceDD, _denialReasonML].forEach(field => LFForm.onFieldChange(
-        event =>  forDenialReasons(event) , {fieldId: field['fieldId']}))
-
-    
 }
 
 // === Dynamic Form Field Functions
-async function forDenialReasons (event) { console.log(event)
+async function forDenialReasons (event) { if (testLogging) console.log("%c===FUNCTION CALLED(): forDenialReasons", "color: yellow", event)
     
     // Adjust Table on Form Launch
-    if (!event) {
-
-        // If the table is empty, we need the field populated to alter
-        let COLsize = LFForm.getFieldValues(_approvalCOL)
-        if (COLsize.length < 1) await LFForm.addSet(_approvalCOL)
-
-        await LFForm.hideFields(_denialReasonML)
-        await LFForm.deleteSet(_approvalCOL, 0) // IF set does not need rows to submit Form
-
-        return; // exit the function and do not process further
-    }
+    if (!event) { if (testLogging) console.log("!!NO EVENT -- EXIT FUNCTION"); return }
 
     // Retrieve the Options
     let fieldObj =  { fieldId: event.options[0]['fieldId'], index: event.options[0]['index']}
@@ -116,41 +103,61 @@ function readOnlyForm () {
 
 
 // === Form Load Functions
-async function hideOnLoad () {  if (testLogging) console.log("%c===FunctionName: hideOnLoad() CALLED", "color: red")
+async function hideOnLoad (currentStepName) {  if (testLogging) console.log("%c===FunctionName: hideOnLoad() CALLED", "color: red", currentStepName)
 
   let hiddenSwitches = []
-  if (hiddenSwitches.length > 0) LFForm.hideFields(hiddenSwitches)
+  if (!['REVIEW'].includes(currentStepName)) hiddenSwitches.push(_EditButton)
+  if (!['ASSIGN', 'REVIEW'].includes(currentStepName)) hiddenSwitches.push(_clearanceDD, _denialReasonML)
+  if (testLogging) console.log(hiddenSwitches)
+  if (hiddenSwitches.length > 0) {
+    await LFForm.addSet(_approvalCOL, 1)
+    await LFForm.hideFields(hiddenSwitches)
+    await LFForm.deleteSet(_approvalCOL, 0)
+  }
 }
 
-async function disableOnLoad () {  if (testLogging) console.log("%c===FunctionName: disableOnLoad() CALLED", "color: red")
+async function disableOnLoad (currentStepName) {  if (testLogging) console.log("%c===FunctionName: disableOnLoad() CALLED", "color: red", currentStepName)
 
   // Trigger Switch to Disable the Correct Email Collection Fields
   let disableFields = [];
-  if (disableFields.length > 0) LFForm.disableFields(disableFields)
+  if (['REVIEW'].includes(currentStepName)) {
+    await LFForm.addSet(_approvalCOL, 1)
+    disableFields.push(_approvalCOL, _employeeName, _clearanceDD, _denialReasonML)
+    await LFForm.disableFields(disableFields)
+    await LFForm.deleteSet(_approvalCOL, LFForm.getFieldValues(_approvalCOL).length-1)
+  }
+  if (testLogging) console.log(disableFields)
 }
 
 
 async function onFormLoad () { 
 
-    let currentStepName = ""
-    if (testLogging) currentStepName = "REVIEW"
+    let currentStepName = "";
+    currentStepName = await LFForm.getFieldValues(_currentStepNameHTML)
+    if (testLogging) currentStepName = "ASSIGN"
 
     switch (currentStepName) {
         case "START":
-            if (testData) await testEnviroment(currentStepName)
+           await LFForm.changeFormSettings({title: "Start Employee Clearance Application"})
+           break;
+        case "ASSIGN":
+            await LFForm.changeFormSettings({title: "Assign Employee Clearance Approval"})
             break;
         case "REVIEW":
-            if (testData) await testEnviroment(currentStepName)
+            await LFForm.changeFormSettings({title: "Review Employee Clearance Applications"})
             break;
         default:
             return;
     }
+
     if (testLogging) console.log("%c===FunctionName: onFormLoad() CALLED", "color: red", currentStepName)
-    forSubscriptions(currentStepName)
+    if (productionView) await disableOnLoad(currentStepName); await hideOnLoad(currentStepName);
+    await forSubscriptions(currentStepName)
+    if (testData) await testEnviroment(currentStepName)
 }
 
 // === Utility Functions
-async function testEnviroment (currentStepName) { if (testLogging) console.log("===FunctionName: testEnviroment() CALLED", currentStepName)
+async function testEnviroment (currentStepName) { if (testLogging) console.log("%c===FunctionName: testEnviroment() CALLED", "color: pink", currentStepName)
 
   let shuffle = Math.floor(Math.random() * 2);
   if (testLogging) console.log(`Testing Scenario ${shuffle} called!`)
@@ -172,15 +179,18 @@ async function testEnviroment (currentStepName) { if (testLogging) console.log("
 
   await LFForm.addSet(_approvalCOL, employeeTest.employeeName.length)
   switch (currentStepName) {
+    case "ASSIGN":
     case "REVIEW":
-        await LFForm.setFieldValues(_clearanceDD, employeeTest.policeApproval)
-        await forDenialReasons() // Need something to reveal the denial forms.
-        await LFForm.setFieldValues(_denialReasonML, employeeTest.denialReason)
+        employeeTest.policeApproval.forEach(async (x, i) => {
+            await LFForm.setFieldValues({fieldId:_clearanceDD['fieldId'], index: i}, x)
+        })
+        employeeTest.denialReason.forEach(async (x, i) => {
+            await LFForm.setFieldValues({fieldId:_denialReasonML['fieldId'], index: i}, x)
+        })
     break;
     default:
         break;
   }
   await LFForm.setFieldValues(_employeeName, employeeTest.employeeName) 
-  // disableOnLoad();
   return;
 }

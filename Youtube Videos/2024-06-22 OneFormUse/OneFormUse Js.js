@@ -165,15 +165,17 @@ async function testEnviroment (currentStepName) { if (testLogging) console.log("
 
   switch (shuffle) {
     case 0:
-      employeeTest = { employeeName: ["Henry Bisquick", "Thomas DiGiorno III", "Beef Thompson", "Lovely Loverson", "Mr Nice Nice", "The Sublimer"], 
-      policeApproval: ["APPROVE", "APPROVE", "DENY", "APPROVE", "APPROVE", "APPROVE"], 
-      denialReason: ["", "", "Arrested", "", "", ""]
+      employeeTest = { 
+        employeeName: ["Henry Bisquick", "Thomas DiGiorno III", "Beef Thompson", "Lovely Loverson", "Mr Nice Nice", "The Sublimer"], 
+        policeApproval: ["APPROVE", "APPROVE", "DENY", "APPROVE", "APPROVE", "APPROVE"], 
+        denialReason: ["", "", "Arrested", "", "", ""]
       }
       break;
     default:
-      employeeTest = { employeeName: ["Martha Washington Jr", "Haley OBoodle", "Seraphina Chequeormoneeorderr", "Lovely Loverson", "Mr Nice Nice", "The Sublimer"], 
-      policeApproval: ["APPROVE", "DENY", "APPROVE", "APPROVE", "APPROVE", "APPROVE"], 
-      denialReason: ["", "Needs more Information", "", "", "", ""]
+      employeeTest = { 
+        employeeName: ["Martha Washington Jr", "Haley OBoodle", "Seraphina Chequeormoneeorderr", "Lovely Loverson", "Mr Nice Nice", "The Sublimer"], 
+        policeApproval: ["APPROVE", "DENY", "APPROVE", "APPROVE", "APPROVE", "APPROVE"], 
+        denialReason: ["", "Needs more Information", "", "", "", ""]
       }
     }
 

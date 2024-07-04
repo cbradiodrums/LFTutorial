@@ -1,7 +1,7 @@
 // === Environment Variables
 const testLogging = false // show console messages
 const testData = false // preload form with testData
-const productionView = true // always keep fields in view
+const productionView = true // access / view of fields switch
 
 // === Form Field Declarations ===
 // Approval Collection
@@ -102,7 +102,7 @@ function readOnlyForm () {
 // === Form Load Functions
 async function hideOnLoad (currentStepName) {  if (testLogging) console.log("%c===FunctionName: hideOnLoad() CALLED", "color: red", currentStepName)
 
-  let hiddenSwitches = []
+  let hiddenSwitches = [_currentStepNameHTML]
   if (!['REVIEW'].includes(currentStepName)) hiddenSwitches.push(_EditButton)
   if (!['ASSIGN', 'REVIEW'].includes(currentStepName)) hiddenSwitches.push(_clearanceDD, _denialReasonML)
   if (testLogging) console.log(hiddenSwitches)
@@ -115,7 +115,6 @@ async function hideOnLoad (currentStepName) {  if (testLogging) console.log("%c=
 
 async function disableOnLoad (currentStepName) {  if (testLogging) console.log("%c===FunctionName: disableOnLoad() CALLED", "color: red", currentStepName)
 
-  // Trigger Switch to Disable the Correct Email Collection Fields
   let disableFields = [];
   if (['REVIEW'].includes(currentStepName)) {
     await LFForm.addSet(_approvalCOL, 1)

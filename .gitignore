@@ -19,6 +19,3 @@
 notepadJS.js
 *.log
 *.xcf
-# Ignore Scratch pads
-notedpadBU.js
-notePad JS.js

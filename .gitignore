@@ -1,4 +1,4 @@
-# Ignore all video and audio file types
+# Ignore all video, image (editors) and audio file types
 *.mp4
 *.avi
 *.mov
@@ -18,3 +18,7 @@
 *.bak
 notepadJS.js
 *.log
+*.xcf
+# Ignore Scratch pads
+notedpadBU.js
+notePad JS.js
